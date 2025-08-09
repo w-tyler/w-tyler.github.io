@@ -1,7 +1,7 @@
 # Jekyll 配置文件
-title: "我的博客"
-description: "基于Jekyll和GitHub Pages的个人博客"
-author: "Tyler"
+title: "天一的树洞"
+description: "一个温馨的分享空间，记录生活点滴与思考感悟"
+author: "天一"
 email: your-email@example.com
 baseurl: "" # GitHub Pages 项目的子路径，通常为空
 url: "https://w-tyler.github.io" # 你的GitHub Pages URL
