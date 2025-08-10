@@ -9,6 +9,17 @@ permalink: /categories/
   <p>探索不同主题的精彩内容，找到你感兴趣的文章</p>
 </div>
 
+<!-- Quick navigation to categories -->
+<div class="category-quick-nav">
+  <h3>🔍 快速跳转</h3>
+  <div class="category-links">
+    {% assign sorted_categories = site.categories | sort %}
+    {% for category in sorted_categories %}
+      <a href="#category-{{ category[0] | slugify }}">{{ category[0] }} ({{ category[1].size }})</a>
+    {% endfor %}
+  </div>
+</div>
+
 <div class="category-grid">
   {% assign sorted_categories = site.categories | sort %}
   {% for category in sorted_categories %}
@@ -70,18 +81,18 @@ permalink: /categories/
 }
 
 .category-section h2 {
-  border-bottom: 3px solid;
-  border-image: var(--gradient-primary) 1;
+  border-bottom: 3px solid var(--primary-color);
   padding-bottom: 1rem;
   margin-bottom: 2rem;
   display: flex;
   align-items: center;
   gap: 1rem;
+  color: var(--text-primary);
 }
 
 .post-count {
-  background: var(--gradient-secondary);
-  color: var(--text-light);
+  background: var(--primary-color);
+  color: var(--text-white);
   padding: 0.3rem 0.8rem;
   border-radius: 50px;
   font-size: 0.8rem;
@@ -95,36 +106,20 @@ permalink: /categories/
 }
 
 .post-card {
-  background: var(--glass-bg);
-  backdrop-filter: blur(15px);
-  border: 1px solid var(--glass-border);
+  background: var(--bg-primary);
+  border: 1px solid var(--border-light);
   border-radius: 15px;
   padding: 1.5rem;
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
-}
-
-.post-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: var(--gradient-tertiary);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  z-index: -1;
+  box-shadow: var(--shadow-sm);
 }
 
 .post-card:hover {
   transform: translateY(-5px);
   box-shadow: var(--shadow-lg);
-}
-
-.post-card:hover::before {
-  opacity: 0.05;
+  border-color: var(--border-medium);
 }
 
 .post-card-header {
@@ -137,19 +132,13 @@ permalink: /categories/
 }
 
 .post-card h3 a {
-  background: var(--gradient-primary);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--text-primary);
   text-decoration: none;
   transition: all 0.3s ease;
 }
 
 .post-card h3 a:hover {
-  background: var(--gradient-secondary);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--primary-color);
 }
 
 .post-date {
@@ -171,31 +160,41 @@ permalink: /categories/
 }
 
 .post-tags .tag {
-  background: var(--gradient-tertiary);
-  color: var(--text-light);
+  background: var(--bg-accent);
+  color: var(--text-secondary);
   padding: 0.2rem 0.6rem;
   border-radius: 20px;
   font-size: 0.75rem;
   font-weight: 500;
 }
 
-/* Quick category navigation */
-.category-nav {
-  background: var(--glass-bg);
-  backdrop-filter: blur(15px);
-  border: 1px solid var(--glass-border);
+.post-tags .tag:hover {
+  background: var(--primary-color);
+  color: var(--text-white);
+}
+
+/* Make category cards clickable for navigation to posts list */
+.category-card {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.category-card:hover {
+  transform: translateY(-2px);
+}
+
+/* Quick navigation between categories */
+.category-quick-nav {
+  background: var(--bg-accent);
   border-radius: 15px;
   padding: 1.5rem;
   margin-bottom: 3rem;
   text-align: center;
 }
 
-.category-nav h3 {
+.category-quick-nav h3 {
   margin-bottom: 1rem;
-  background: var(--gradient-primary);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--text-primary);
 }
 
 .category-links {
@@ -206,8 +205,8 @@ permalink: /categories/
 }
 
 .category-links a {
-  background: var(--gradient-secondary);
-  color: var(--text-light);
+  background: var(--primary-color);
+  color: var(--text-white);
   padding: 0.5rem 1rem;
   border-radius: 25px;
   text-decoration: none;
@@ -216,6 +215,7 @@ permalink: /categories/
 }
 
 .category-links a:hover {
+  background: var(--primary-dark);
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
 }
@@ -233,25 +233,60 @@ permalink: /categories/
     flex-direction: column;
     align-items: center;
   }
+  
+  .post-card {
+    padding: 1rem;
+  }
 }
 </style>
 
 <script>
-// Smooth scrolling for category navigation
+// Enhanced category navigation
 document.addEventListener('DOMContentLoaded', function() {
   // Add click event to category cards for navigation
   document.querySelectorAll('.category-card').forEach(function(card) {
     card.addEventListener('click', function() {
       const categoryName = this.querySelector('h3').textContent;
-      const categoryId = 'category-' + categoryName.toLowerCase().replace(/[^a-z0-9]/g, '-');
+      const categoryId = 'category-' + categoryName.toLowerCase().replace(/[^a-z0-9\u4e00-\u9fff]/g, '-');
       const targetElement = document.getElementById(categoryId);
       if (targetElement) {
-        targetElement.scrollIntoView({ behavior: 'smooth' });
+        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Add highlight effect
+        targetElement.style.backgroundColor = 'var(--bg-accent)';
+        targetElement.style.borderRadius = '0.75rem';
+        targetElement.style.padding = '1rem';
+        targetElement.style.transition = 'all 0.3s ease';
+        
+        // Remove highlight after animation
+        setTimeout(function() {
+          targetElement.style.backgroundColor = '';
+          targetElement.style.padding = '';
+        }, 2000);
       }
     });
-    
-    // Add cursor pointer style
-    card.style.cursor = 'pointer';
+  });
+  
+  // Add smooth scrolling for quick navigation links
+  document.querySelectorAll('.category-links a').forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      const targetId = this.getAttribute('href').substring(1);
+      const targetElement = document.getElementById(targetId);
+      if (targetElement) {
+        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Add highlight effect
+        targetElement.style.backgroundColor = 'var(--bg-accent)';
+        targetElement.style.borderRadius = '0.75rem';
+        targetElement.style.padding = '1rem';
+        targetElement.style.transition = 'all 0.3s ease';
+        
+        // Remove highlight after animation
+        setTimeout(function() {
+          targetElement.style.backgroundColor = '';
+          targetElement.style.padding = '';
+        }, 2000);
+      }
+    });
   });
 });
 </script> 
