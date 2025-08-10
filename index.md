@@ -17,14 +17,14 @@ title: 首页
     <h2>
       <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
     </h2>
-    <p class="post-meta">
+    <div class="post-meta">
       {{ post.date | date: "%Y年%m月%d日" }}
       {% if post.categories.size > 0 %}
       • {% for category in post.categories %}
         <a href="{{ '/categories' | relative_url }}#category-{{ category | slugify }}" class="category">{{ category }}</a>{% unless forloop.last %}, {% endunless %}
       {% endfor %}
       {% endif %}
-    </p>
+    </div>
     <div class="post-excerpt">
       {{ post.excerpt }}
       <a href="{{ post.url | relative_url }}">阅读全文 →</a>
