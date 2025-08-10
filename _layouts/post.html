@@ -15,7 +15,7 @@ layout: default
       {% if page.categories.size > 0 %}
       • 分类: 
       {% for category in page.categories %}
-        <span class="category">{{ category }}</span>
+        <a href="{{ '/categories' | relative_url }}#category-{{ category | slugify }}" class="category">{{ category }}</a>
       {% endfor %}
       {% endif %}
     </p>

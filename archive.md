@@ -18,7 +18,7 @@ permalink: /archive/
       {% if post.categories.size > 0 %}
         <span class="archive-categories">
           {% for category in post.categories %}
-            <span class="category">{{ category }}</span>
+            <a href="{{ '/categories' | relative_url }}#category-{{ category | slugify }}" class="category">{{ category }}</a>
           {% endfor %}
         </span>
       {% endif %}

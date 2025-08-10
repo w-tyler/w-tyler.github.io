@@ -20,7 +20,9 @@ title: 首页
     <p class="post-meta">
       {{ post.date | date: "%Y年%m月%d日" }}
       {% if post.categories.size > 0 %}
-      • {{ post.categories | join: ", " }}
+      • {% for category in post.categories %}
+        <a href="{{ '/categories' | relative_url }}#category-{{ category | slugify }}" class="category">{{ category }}</a>{% unless forloop.last %}, {% endunless %}
+      {% endfor %}
       {% endif %}
     </p>
     <div class="post-excerpt">
