@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Sentinel 网关集成：手动异常追踪实现熔断降级"
-date: 2025-01-12
+date: 2020-12-15
 categories: [微服务, 熔断降级]
 tags: [sentinel, gateway, 熔断, 降级, spring-cloud]
 ---
@@ -111,6 +111,10 @@ public class SentinelStatusFilter implements GlobalFilter, Ordered {
 - 当检测到 500 状态码时，通过 `SphU.entry()` 创建 Sentinel 入口
 - 使用 `Tracer.trace()` 手动记录异常
 - 第三个参数设置为 0，避免重复计算 QPS
+
+## 遗留问题
+
+需要注意的是，这样改造完之后 Sentinel 计数器会多计一次。这是因为网关转发请求时，Sentinel 已经对该资源进行了一次计数，而我们的 Filter 中又手动调用了 `SphU.entry()`，这会导致重复计数的问题。
 
 ## 扩展功能
 
